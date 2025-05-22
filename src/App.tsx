@@ -16,6 +16,16 @@ import Providers from "./pages/Providers";
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
+// New Pages
+import About from "./pages/About";
+import Services from "./pages/Services";
+import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import Help from "./pages/Help";
+import Documentation from "./pages/Documentation";
+import FAQs from "./pages/FAQs";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -29,6 +39,10 @@ const App = () => (
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faqs" element={<FAQs />} />
           
           {/* Protected Routes (would typically have authentication guards) */}
           <Route path="/dashboard" element={<Dashboard />} />
@@ -36,6 +50,10 @@ const App = () => (
           <Route path="/students/add" element={<AddStudent />} />
           <Route path="/providers" element={<Providers />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/documentation" element={<Documentation />} />
           
           {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />
