@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GraduationCap, UserPlus } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,8 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const Signup: React.FC = () => {
   const [firstName, setFirstName] = useState('');
@@ -30,26 +32,69 @@ const Signup: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Validate passwords match
+    // Validate form
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
+      toast({
+        variant: "destructive",
+        title: "Passwords don't match",
+        description: "Please make sure your passwords match."
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast({
+        variant: "destructive",
+        title: "Terms and conditions",
+        description: "You must accept the terms and conditions to sign up."
+      });
       setIsLoading(false);
       return;
     }
     
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Signup attempted with:', { firstName, lastName, email, password, role });
-      setIsLoading(false);
+    try {
+      // Sign up with Supabase
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            firstName,
+            lastName,
+            role
+          }
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // Success - show toast and redirect
+      toast({
+        title: "Account created",
+        description: "Your account has been created successfully. You can now log in."
+      });
       
-      // In a real app, you would redirect after successful signup
-      // For demonstration, we'll just log the data
-    }, 1500);
+      navigate('/login');
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Registration failed",
+        description: error.message || "There was an error creating your account."
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -153,6 +198,8 @@ const Signup: React.FC = () => {
                     type="checkbox"
                     id="terms"
                     className="rounded border-gray-300 text-primary focus:ring-primary"
+                    checked={termsAccepted}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
                     required
                   />
                   <label htmlFor="terms" className="text-sm text-muted-foreground">
