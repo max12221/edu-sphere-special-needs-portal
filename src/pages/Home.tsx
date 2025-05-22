@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle, Users, ClipboardList, FileText, Chart } from 'lucide-react';
+import { CheckCircle, Users, ClipboardList, FileText, BarChart } from 'lucide-react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 
@@ -87,7 +87,7 @@ const Home: React.FC = () => {
             {/* Feature 4 */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-border hover:shadow-md transition-all duration-200">
               <div className="rounded-full bg-edusphere-100 p-3 w-12 h-12 flex items-center justify-center mb-4">
-                <Chart className="h-6 w-6 text-edusphere-600" />
+                <BarChart className="h-6 w-6 text-edusphere-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Reports & Analytics</h3>
               <p className="text-muted-foreground">
